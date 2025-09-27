@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { getSession } from '@/lib/session';
@@ -30,7 +31,14 @@ export default async function DashboardPage() {
     const allUsers = await db.collection('users').find({}).toArray();
     
     const recentReports = issues.slice(0, 10).map(issue => `[${issue.category}] ${issue.title}: ${issue.description}`).join('\n');
-    const { summary } = await summarizeIssueReports({ reports: recentReports });
+    
+    let summary = 'AI summary is currently unavailable.';
+    try {
+        const summaryResult = await summarizeIssueReports({ reports: recentReports });
+        summary = summaryResult.summary;
+    } catch (error) {
+        console.error("Failed to generate AI summary:", error);
+    }
 
     // Aggregate analytics data
     const issuesByCategory: { [key in IssueCategory]?: number } = {};

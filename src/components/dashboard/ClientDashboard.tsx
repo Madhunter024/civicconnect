@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState } from 'react';
@@ -507,7 +508,7 @@ export default function ClientDashboard({ summary, issues: allIssues, users, ana
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {users.map((user: any) => (
-                <tr key={user.id} className="hover:bg-gray-50">
+                <tr key={user._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-3">
                       <div className="flex-shrink-0">
@@ -768,7 +769,7 @@ export default function ClientDashboard({ summary, issues: allIssues, users, ana
         </div>
         
         <div className="mt-6 flex space-x-3">
-          <ActionButton onClick={() => {}} icon={Save} label="Save Settings" variant='default' />
+          <ActionButton onClick={() => {}} icon={Save} label="Save Settings" />
           <ActionButton onClick={() => {}} icon={RefreshCw} label="Reset to Default" variant="secondary" />
         </div>
       </div>
@@ -804,8 +805,8 @@ export default function ClientDashboard({ summary, issues: allIssues, users, ana
               {activeSection === 'issues' && renderIssueManagement()}
               {activeSection === 'users' && renderUserManagement()}
               {activeSection === 'departments' && renderDepartmentControl()}
-              {activeSection === 'analytics' && renderAnalytics()}
-              {activeSection === 'system' && renderSystemSettings()}
+              {active-section === 'analytics' && renderAnalytics()}
+              {active-section === 'system' && renderSystemSettings()}
             </div>
           </main>
       </div>
@@ -911,3 +912,4 @@ export default function ClientDashboard({ summary, issues: allIssues, users, ana
     </div>
   );
 };
+```

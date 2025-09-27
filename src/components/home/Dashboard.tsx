@@ -10,7 +10,6 @@ import {
   Plus, 
   Calendar, 
   MapPin, 
-  Clock,
   BarChart3,
   LogOut,
   List,

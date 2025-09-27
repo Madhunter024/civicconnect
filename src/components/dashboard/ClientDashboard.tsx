@@ -1,7 +1,8 @@
+
 'use client';
 
 import React, { useState } from 'react';
-import type { Issue } from '@/lib/types';
+import type { Issue, User } from '@/lib/types';
 import { 
   BarChart3, 
   Users, 
@@ -15,7 +16,6 @@ import {
   MapPin,
   Calendar,
   Clock,
-  User,
   Building2,
   Filter,
   Search,
@@ -55,13 +55,14 @@ import { Button } from '../ui/button';
 interface ClientDashboardProps {
   summary: string;
   issues: Issue[];
+  users: User[];
   analyticsData: {
     issuesByCategory: { name: string; value: number }[];
   };
 }
 
 
-export default function ClientDashboard({ summary, issues: allIssues, analyticsData: summaryAnalyticsData }: ClientDashboardProps) {
+export default function ClientDashboard({ summary, issues: allIssues, users, analyticsData: summaryAnalyticsData }: ClientDashboardProps) {
   const [activeSection, setActiveSection] = useState('overview');
   const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -77,56 +78,13 @@ export default function ClientDashboard({ summary, issues: allIssues, analyticsD
     resolvedIssues: allIssues.filter(i => i.status === 'Resolved').length,
     pendingIssues: allIssues.filter(i => i.status !== 'Resolved' && i.status !== 'Rejected').length,
     highPriorityIssues: allIssues.filter(i => (i as any).priority === 'high').length,
-    activeUsers: 156789, // Sample data
-    registeredOfficials: 2456, // Sample data
+    activeUsers: users.length, 
+    registeredOfficials: users.filter(u => u.role === 'official').length,
     averageResolutionTime: 4.2, // Sample data
     citizenSatisfaction: 94.5 // Sample data
   };
 
   const issues = allIssues; // Using passed issues
-
-  const users = [
-    {
-      id: 'U001',
-      name: 'राम कुमार',
-      email: 'ram.kumar@email.com',
-      phone: '+91 9876543210',
-      district: 'Ranchi',
-      role: 'Citizen',
-      joinDate: '2024-01-15',
-      issuesReported: 12,
-      status: 'active',
-      verificationLevel: 'verified'
-    },
-    {
-      id: 'O001',
-      name: 'अधिकारी राज पटेल',
-      email: 'raj.patel@jharkhand.gov.in',
-      phone: '+91 9876543211',
-      district: 'Ranchi',
-      role: 'District Official',
-      department: 'Administrative',
-      joinDate: '2023-06-10',
-      issuesHandled: 156,
-      status: 'active',
-      verificationLevel: 'government_verified'
-    },
-    {
-      id: 'F001',
-      name: 'अजय कुमार',
-      email: 'ajay.kumar@pwd.jharkhand.gov.in',
-      phone: '+91 9876543212',
-      district: 'Ranchi',
-      role: 'Field Officer',
-      department: 'PWD',
-      designation: 'Assistant Engineer',
-      joinDate: '2023-08-20',
-      issuesResolved: 89,
-      averageResolutionDays: 3.2,
-      status: 'active',
-      verificationLevel: 'government_verified'
-    }
-  ];
 
   const departments = [
     {
@@ -542,66 +500,44 @@ export default function ClientDashboard({ summary, issues: allIssues, analyticsD
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User Details</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role & Department</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Activity</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {users.map((user) => (
+              {users.map((user: any) => (
                 <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-3">
                       <div className="flex-shrink-0">
                         <div className="w-10 h-10 bg-gradient-to-r from-orange-400 to-green-400 rounded-full flex items-center justify-center text-white font-medium">
-                          {user.name.charAt(0)}
+                          {user.username.charAt(0)}
                         </div>
                       </div>
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                        <div className="text-sm font-medium text-gray-900">{user.username}</div>
                         <div className="text-sm text-gray-500">{user.email}</div>
-                        <div className="text-xs text-gray-400">{user.phone}</div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-sm">
-                      <div className="font-medium text-gray-900">{user.role}</div>
+                      <div className="font-medium text-gray-900 capitalize">{user.role}</div>
                       {user.department && <div className="text-gray-500">{user.department}</div>}
-                      {user.designation && <div className="text-xs text-gray-400">{user.designation}</div>}
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">{user.district}</td>
+                 
                   <td className="px-6 py-4">
                     <div className="text-sm">
-                      {user.issuesReported && (
-                        <div className="text-gray-900">Reported: {user.issuesReported}</div>
-                      )}
-                      {user.issuesHandled && (
-                        <div className="text-gray-900">Handled: {user.issuesHandled}</div>
-                      )}
-                      {user.issuesResolved && (
-                        <div className="text-gray-900">Resolved: {user.issuesResolved}</div>
-                      )}
-                      <div className="text-xs text-gray-500">Joined: {new Date(user.joinDate).toLocaleDateString()}</div>
+                      <div className="text-xs text-gray-500">Joined: {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
                     <div className="space-y-2">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        user.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                      }`}>
-                        {user.status}
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800`}>
+                        active
                       </span>
-                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        user.verificationLevel === 'government_verified' ? 'bg-blue-100 text-blue-800' :
-                        user.verificationLevel === 'verified' ? 'bg-green-100 text-green-800' :
-                        'bg-yellow-100 text-yellow-800'
-                      }`}>
-                        {user.verificationLevel === 'government_verified' ? 'Gov Verified' : 
-                         user.verificationLevel === 'verified' ? 'Verified' : 'Pending'}
-                      </div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
@@ -905,8 +841,8 @@ export default function ClientDashboard({ summary, issues: allIssues, analyticsD
             <div className="sticky top-0 bg-white border-b border-gray-200 p-6 rounded-t-xl">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900">{(selectedIssue as any).title}</h3>
-                  <p className="text-sm text-gray-500 mt-1">ID: {(selectedIssue as any).id}</p>
+                  <h3 className="text-2xl font-bold text-gray-900">{selectedIssue.title}</h3>
+                  <p className="text-sm text-gray-500 mt-1">ID: {selectedIssue.id}</p>
                 </div>
                 <button
                   onClick={() => setSelectedIssue(null)}
@@ -922,19 +858,19 @@ export default function ClientDashboard({ summary, issues: allIssues, analyticsD
                 <div className="space-y-4">
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-2">Description</h4>
-                    <p className="text-gray-700">{(selectedIssue as any).description}</p>
+                    <p className="text-gray-700">{selectedIssue.description}</p>
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-2">Admin Notes</h4>
                     <p className="text-gray-600 text-sm bg-yellow-50 p-3 rounded-lg">
-                      {(selectedIssue as any).adminNotes || 'No admin notes.'}
+                      {selectedIssue.adminNotes || 'No admin notes.'}
                     </p>
                   </div>
-                  {(selectedIssue as any).resolutionNotes && (
+                  {selectedIssue.resolutionNotes && (
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-2">Resolution Notes</h4>
                       <p className="text-green-700 text-sm bg-green-50 p-3 rounded-lg">
-                        {(selectedIssue as any).resolutionNotes}
+                        {selectedIssue.resolutionNotes}
                       </p>
                     </div>
                   )}
@@ -946,22 +882,22 @@ export default function ClientDashboard({ summary, issues: allIssues, analyticsD
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <span className="text-gray-600">Public Views:</span>
-                        <span className="font-medium ml-2">{(selectedIssue as any).publicViews || 0}</span>
+                        <span className="font-medium ml-2">{selectedIssue.publicViews || 0}</span>
                       </div>
                       <div>
                         <span className="text-gray-600">Urgency Score:</span>
-                        <span className="font-medium ml-2">{(selectedIssue as any).urgencyScore || 'N/A'}/10</span>
+                        <span className="font-medium ml-2">{selectedIssue.urgencyScore || 'N/A'}/10</span>
                       </div>
                       <div>
                         <span className="text-gray-600">Priority:</span>
-                        <span className={`ml-2 px-2 py-1 rounded text-xs font-medium ${getPriorityColor((selectedIssue as any).priority)}`}>
-                          {(selectedIssue as any).priority || 'N/A'}
+                        <span className={`ml-2 px-2 py-1 rounded text-xs font-medium ${getPriorityColor(selectedIssue.priority)}`}>
+                          {selectedIssue.priority || 'N/A'}
                         </span>
                       </div>
                       <div>
                         <span className="text-gray-600">Status:</span>
-                        <span className={`ml-2 px-2 py-1 rounded text-xs font-medium ${getStatusColor((selectedIssue as any).status)}`}>
-                          {(selectedIssue as any).status}
+                        <span className={`ml-2 px-2 py-1 rounded text-xs font-medium ${getStatusColor(selectedIssue.status)}`}>
+                          {selectedIssue.status}
                         </span>
                       </div>
                     </div>

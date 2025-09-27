@@ -2,13 +2,14 @@
 'use server';
 
 import { getSession } from '@/lib/session';
-import { issues } from '@/lib/data';
+import { issues as mockIssues } from '@/lib/data';
 import type { User, IssueCategory } from '@/lib/types';
 import Dashboard from '@/components/home/Dashboard';
 import { summarizeIssueReports } from '@/ai/flows/summarize-issue-reports';
 import ClientDashboard from '@/components/dashboard/ClientDashboard';
 import { redirect } from 'next/navigation';
 import OfficialDashboard from '@/components/dashboard/OfficialDashboard';
+import { connectToDatabase } from '@/lib/mongodb';
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -19,8 +20,15 @@ export default async function DashboardPage() {
 
   const user = session.user as User;
 
+  // In a real app, you would fetch issues from the database.
+  // For now, we continue to use the mock data for issues.
+  const issues = mockIssues;
+
   if (user.role === 'admin') {
-    // For admins, summarize the latest 10 reports
+    const { db } = await connectToDatabase();
+    // For admins, fetch all users and summarize reports
+    const allUsers = await db.collection('users').find({}).toArray();
+    
     const recentReports = issues.slice(0, 10).map(issue => `[${issue.category}] ${issue.title}: ${issue.description}`).join('\n');
     const { summary } = await summarizeIssueReports({ reports: recentReports });
 
@@ -34,7 +42,7 @@ export default async function DashboardPage() {
         issuesByCategory: Object.entries(issuesByCategory).map(([name, value]) => ({ name, value })),
     };
 
-    return <ClientDashboard summary={summary} issues={issues} analyticsData={analyticsData} />;
+    return <ClientDashboard summary={summary} issues={issues} users={JSON.parse(JSON.stringify(allUsers))} analyticsData={analyticsData} />;
   }
   
   if (user.role === 'official') {

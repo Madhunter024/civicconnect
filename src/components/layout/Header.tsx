@@ -51,7 +51,7 @@ export default function Header({ user, className }: HeaderProps) {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-              <NavLink href="/home">Home</NavLink>
+              <NavLink href="/">Home</NavLink>
               <NavLink href="/issues">Browse Issues</NavLink>
               {user ? (
                 <>
@@ -86,7 +86,7 @@ export default function Header({ user, className }: HeaderProps) {
           {isMenuOpen && showAuthButtons && (
             <div className="md:hidden py-4 border-t border-gray-200">
               <div className="space-y-2">
-                <NavLink href="/home" mobile>Home</NavLink>
+                <NavLink href="/" mobile>Home</NavLink>
                 <NavLink href="/issues" mobile>Browse Issues</NavLink>
                 <div className="pt-2">
                    {user ? (

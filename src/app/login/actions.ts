@@ -63,11 +63,11 @@ export async function login(
     return { error: 'An unexpected error occurred. Please try again.' };
   }
 
-  redirect('/home');
+  redirect('/dashboard');
 }
 
 export async function logout() {
   const session = await getSession();
   session.destroy();
-  redirect('/home');
+  redirect('/');
 }

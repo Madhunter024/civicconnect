@@ -1,3 +1,4 @@
+
 'use server';
 
 import { getSession } from '@/lib/session';
@@ -25,6 +26,25 @@ export async function login(
   }
 
   const { username, password, role } = validatedFields.data;
+
+  // Handle hardcoded admin user
+  if (role === 'admin' && username === 'admin@civicconnect') {
+    if (password === 'civicconnectadmin') {
+      const session = await getSession();
+      session.user = {
+        id: 'admin_user',
+        username: 'Admin',
+        email: 'admin@civicconnect.com',
+        role: 'admin',
+      };
+      session.isLoggedIn = true;
+      await session.save();
+      redirect('/dashboard');
+    } else {
+      return { error: 'Invalid username or password.' };
+    }
+  }
+
 
   try {
     const { db } = await connectToDatabase();

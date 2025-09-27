@@ -4,7 +4,7 @@ import type { User } from './types';
 
 export const sessionOptions = {
   cookieName: 'citizengage_session',
-  password: process.env.SESSION_PASSWORD || 'complex_password_at_least_32_characters_long',
+  password: process.env.SESSION_PASSWORD || 'complex_password_at_least_32_characters_long_for_dev',
   cookieOptions: {
     secure: process.env.NODE_ENV === 'production',
   },
@@ -12,7 +12,11 @@ export const sessionOptions = {
 
 export interface SessionData {
   isLoggedIn: boolean;
-  user?: User;
+  user?: {
+      id: string;
+      username: string;
+      email: string;
+  };
 }
 
 export async function getSession() {

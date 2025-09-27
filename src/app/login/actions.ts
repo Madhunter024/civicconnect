@@ -2,27 +2,57 @@
 
 import { getSession } from '@/lib/session';
 import { redirect } from 'next/navigation';
+import { connectToDatabase } from '@/lib/mongodb';
+import bcrypt from 'bcryptjs';
+import { z } from 'zod';
+
+const loginSchema = z.object({
+    username: z.string().min(1, 'Username is required.'),
+    password: z.string().min(1, 'Password is required.'),
+});
+
 
 export async function login(
   prevState: { error: string } | null,
   formData: FormData
 ) {
-  const session = await getSession();
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
+  const validatedFields = loginSchema.safeParse(Object.fromEntries(formData));
 
-  // In a real app, you'd look up the user from the database
-  if (email === 'm@example.com' && password === 'password') {
+  if (!validatedFields.success) {
+    return { error: 'Invalid fields. Please check your inputs.' };
+  }
+
+  const { username, password } = validatedFields.data;
+
+  try {
+    const { db } = await connectToDatabase();
+    const user = await db.collection('users').findOne({ username });
+
+    if (!user) {
+      return { error: 'Invalid username or password.' };
+    }
+
+    const passwordsMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordsMatch) {
+      return { error: 'Invalid username or password.' };
+    }
+
+    const session = await getSession();
     session.user = {
-      name: 'Admin User',
-      avatarUrl: 'https://i.pravatar.cc/150?u=admin',
+      id: user._id.toString(),
+      username: user.username,
+      email: user.email,
     };
     session.isLoggedIn = true;
     await session.save();
-    return { success: true };
+
+  } catch (error) {
+    console.error(error);
+    return { error: 'An unexpected error occurred. Please try again.' };
   }
 
-  return { error: 'Invalid email or password.' };
+  redirect('/dashboard');
 }
 
 export async function logout() {

@@ -45,16 +45,15 @@ export function SidebarNav() {
         </SidebarMenuItem>
       ))}
        <SidebarMenuItem>
-          <form action={logout}>
-            <button type="submit" className="w-full">
-              <SidebarMenuButton
-                icon={<LogOut />}
-                tooltip="Logout"
-                className="w-full"
-              >
-                <span>Logout</span>
-              </SidebarMenuButton>
-            </button>
+          <form action={logout} className="w-full">
+            <SidebarMenuButton
+              icon={<LogOut />}
+              tooltip="Logout"
+              className="w-full"
+              type="submit"
+            >
+              <span>Logout</span>
+            </SidebarMenuButton>
           </form>
         </SidebarMenuItem>
     </SidebarMenu>

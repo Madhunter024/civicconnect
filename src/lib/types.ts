@@ -22,5 +22,5 @@ export interface Issue {
   imageHint: string;
   reportedAt: string;
   updatedAt: string;
-  reporter: Pick<User, 'username'>;
+  reporter: Pick<User, 'username'> & { avatarUrl?: string };
 }

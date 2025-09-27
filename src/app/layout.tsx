@@ -16,6 +16,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await getSession();
+  const isDashboard = session.isLoggedIn && session.user;
   
   return (
     <html lang="en" className="h-full">
@@ -28,7 +29,7 @@ export default async function RootLayout({
         />
       </head>
       <body className={cn('font-body antialiased', 'h-full flex flex-col')}>
-        <Header user={session.user} />
+        {!isDashboard && <Header user={session.user} />}
         <main className="flex-1">
           {children}
         </main>

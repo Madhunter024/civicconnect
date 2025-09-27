@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React from 'react';
@@ -18,6 +19,7 @@ import {
 import Link from 'next/link';
 import { logout } from '@/app/login/actions';
 import { Button } from '@/components/ui/button';
+import Logo from '@/components/layout/Logo';
 
 interface DashboardProps {
     user: User;
@@ -94,16 +96,7 @@ const Dashboard = ({ user, pendingIssues, resolvedIssues }: DashboardProps) => {
         {/* Sidebar */}
         <aside className="w-64 flex-shrink-0 bg-card border-r hidden md:flex flex-col">
            <div className="h-16 flex items-center px-6 border-b">
-             <div className="flex items-center space-x-3">
-                <div className="bg-gradient-to-r from-orange-600 to-green-600 p-2 rounded-xl shadow-lg">
-                  <BarChart3 className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-lg font-bold bg-gradient-to-r from-orange-600 to-green-600 bg-clip-text text-transparent">
-                    Civic Connect
-                  </h1>
-                </div>
-              </div>
+             <Logo />
            </div>
            <nav className="flex-grow p-4">
               <div className="space-y-2">
@@ -129,25 +122,17 @@ const Dashboard = ({ user, pendingIssues, resolvedIssues }: DashboardProps) => {
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col">
-          <header className="bg-card shadow-sm border-b border-border">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-between h-16">
-                 <div>
-                    <h1 className="text-2xl font-bold text-foreground">Welcome, {user.username}!</h1>
-                 </div>
-                <div className="flex items-center space-x-4">
+          <main className="flex-1 p-6 bg-background space-y-8">
+              <div className="flex items-center justify-between">
+                  <h1 className="text-2xl font-bold text-foreground">Welcome, {user.username}!</h1>
                   <Button asChild>
                     <Link href="/dashboard/report">
                       <Plus className="mr-2" />
                       <span>Report Issue</span>
                     </Link>
                   </Button>
-                </div>
               </div>
-            </div>
-          </header>
 
-          <main className="flex-1 p-6 bg-background space-y-8">
               {/* Statistics Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-card rounded-xl p-6 border border-border">

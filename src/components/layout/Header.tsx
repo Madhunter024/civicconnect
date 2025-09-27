@@ -43,7 +43,7 @@ export default function Header() {
               </Button>
             ))}
             <Button asChild>
-              <Link href="/login">Dashboard Login</Link>
+              <Link href="/dashboard">Dashboard</Link>
             </Button>
           </nav>
           <div className="md:hidden flex items-center">
@@ -67,7 +67,7 @@ export default function Header() {
               </Button>
             ))}
             <Button asChild className="w-full">
-              <Link href="/login" onClick={() => setIsOpen(false)}>Dashboard Login</Link>
+              <Link href="/dashboard" onClick={() => setIsOpen(false)}>Dashboard</Link>
             </Button>
           </nav>
         </div>

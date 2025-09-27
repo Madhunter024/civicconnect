@@ -12,7 +12,7 @@ export default function IssuesPage() {
           Browse all issues reported by the community. See what's being addressed in your city.
         </p>
          <Button asChild className="mt-6">
-          <Link href="/login">Report an Issue or View Dashboard</Link>
+          <Link href="/dashboard">Report an Issue or View Dashboard</Link>
         </Button>
       </div>
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

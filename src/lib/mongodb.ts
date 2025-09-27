@@ -38,4 +38,6 @@ if (process.env.NODE_ENV === 'development') {
 
 export async function connectToDatabase() {
     const client = await clientPromise;
-    const db
+    const db = client.db();
+    return { client, db };
+}

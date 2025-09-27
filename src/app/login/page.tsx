@@ -17,7 +17,6 @@ import { Label } from "@/components/ui/label"
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { login } from '@/app/login/actions';
-import { BarChart3 } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import Logo from '@/components/layout/Logo';
 
@@ -28,13 +27,10 @@ export default function LoginPage() {
     const [state, formAction, isPending] = useActionState(login, null);
 
     useEffect(() => {
-        if (state?.success) {
-            toast({ title: 'Success', description: 'Logged in successfully!' });
-            router.push('/home');
-        } else if (state?.error) {
+        if (state?.error) {
             toast({ title: 'Error', description: state.error, variant: 'destructive' });
         }
-    }, [state, router, toast]);
+    }, [state, toast]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-orange-50 via-white to-green-50">

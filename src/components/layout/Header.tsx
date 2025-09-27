@@ -57,7 +57,7 @@ export default function Header({ user, className }: HeaderProps) {
                 <>
                   <span className="text-sm text-muted-foreground">Welcome, {user.username}</span>
                   <Button asChild size="sm">
-                    <Link href="/home">Dashboard</Link>
+                    <Link href="/dashboard">Dashboard</Link>
                   </Button>
                 </>
               ) : (
@@ -91,7 +91,7 @@ export default function Header({ user, className }: HeaderProps) {
                 <div className="pt-2">
                    {user ? (
                       <Button asChild className="w-full">
-                        <Link href="/home">Dashboard</Link>
+                        <Link href="/dashboard">Dashboard</Link>
                       </Button>
                    ) : (
                       <Button asChild className="w-full bg-gradient-to-r from-orange-600 to-green-600 text-white font-semibold">

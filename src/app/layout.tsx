@@ -2,8 +2,6 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
-import { getSession } from '@/lib/session';
-import Header from '@/components/layout/Header';
 
 export const metadata = {
   title: 'Civic Connect - Jharkhand',
@@ -15,7 +13,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getSession();
   
   return (
     <html lang="en" className="h-full">
@@ -28,8 +25,6 @@ export default async function RootLayout({
         />
       </head>
       <body className={cn('font-body antialiased', 'h-full flex flex-col')}>
-        {/* The Header is now always rendered here for a consistent layout */}
-        <Header user={session.user} />
         <main className="flex-1">
           {children}
         </main>

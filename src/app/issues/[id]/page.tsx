@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Calendar, User } from 'lucide-react';
 import StatusTracker from '@/components/issues/StatusTracker';
+import IssueMap from '@/components/issues/IssueMap';
 
 export function generateStaticParams() {
   return issues.map((issue) => ({
@@ -96,6 +97,14 @@ export default function IssueDetailPage({ params }: { params: { id: string } }) 
                             </div>
                         </div>
                     </div>
+                </CardContent>
+            </Card>
+             <Card>
+                <CardHeader>
+                    <CardTitle>Location</CardTitle>
+                </CardHeader>
+                <CardContent className="h-64 -mx-6 -mb-6">
+                   <IssueMap lat={issue.location.lat} lng={issue.location.lng} />
                 </CardContent>
             </Card>
         </div>

@@ -1,13 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import type { Issue } from "@/lib/types";
-import { Bot, MapPin } from "lucide-react";
-import Image from "next/image";
+import { Bot } from "lucide-react";
 import Link from "next/link";
-
-const mapImage = PlaceHolderImages.find(img => img.id === 'dashboard-map');
+import HotspotMap from "./HotspotMap";
 
 interface OverviewProps {
   summary: string;
@@ -71,24 +68,8 @@ export default function Overview({ summary, issues }: OverviewProps) {
             <CardTitle>Issue Hotspots</CardTitle>
             <CardDescription>A real-time view of reported issues across the city.</CardDescription>
           </CardHeader>
-          <CardContent className="relative w-full aspect-[4/3] rounded-lg overflow-hidden">
-            {mapImage && (
-              <Image 
-                src={mapImage.imageUrl} 
-                alt="City map with issue hotspots" 
-                fill 
-                className="object-cover" 
-                data-ai-hint={mapImage.imageHint} 
-              />
-            )}
-            {issues.map(issue => (
-                <div key={issue.id} className="absolute group" style={{ left: `${(issue.location.lng - -118.26) * 100 / ( -118.23 - -118.26)}%`, top: `${(34.06 - issue.location.lat) * 100 / (34.06 - 34.04)}%` }}>
-                    <MapPin className="w-6 h-6 text-primary fill-current transform -translate-x-1/2 -translate-y-full" />
-                    <div className="hidden group-hover:block absolute bottom-0 left-1/2 -translate-x-1/2 p-2 bg-popover text-popover-foreground rounded-md shadow-lg text-xs w-32">
-                        {issue.title}
-                    </div>
-                </div>
-            ))}
+          <CardContent className="h-full w-full -p-6">
+            <HotspotMap issues={issues} />
           </CardContent>
         </Card>
       </div>

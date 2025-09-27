@@ -1,3 +1,4 @@
+
 import type { Department } from './types';
 
 export const departments: Department[] = [
@@ -21,7 +22,7 @@ export const departments: Department[] = [
   { name: 'Department of Labour, Employment, Training and Skill Development' },
   { name: 'Department of Law' },
   { name: 'Department of Mines & Geology' },
-  { name 'Department of Panchayati Raj' },
+  { name: 'Department of Panchayati Raj' },
   { name: 'Department of Personnel, Administrative Reforms & Rajbhasha' },
   { name: 'Department of Planning & Development' },
   { name: 'Department of Revenue, Registration & Land Reforms' },

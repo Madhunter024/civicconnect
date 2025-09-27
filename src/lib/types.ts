@@ -15,7 +15,8 @@ export interface Department {
 }
 
 export interface Issue {
-  id:string;
+  id: string;
+  _id?: any;
   title: string;
   description: string;
   category: IssueCategory;

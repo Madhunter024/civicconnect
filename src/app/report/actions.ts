@@ -4,10 +4,10 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { categorizeCivicIssue } from '@/ai/flows/categorize-civic-issues';
-import { issues } from '@/lib/data';
 import type { Issue, IssueCategory, User } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { getSession } from '@/lib/session';
+import { connectToDatabase } from '@/lib/mongodb';
 
 const formSchema = z.object({
   description: z.string(),
@@ -72,16 +72,13 @@ export async function reportIssue(prevState: FormState, formData: FormData): Pro
     const mappedCategory = Object.keys(categoryMap).find(key => normalizedCategory.includes(key))
       ? categoryMap[Object.keys(categoryMap).find(key => normalizedCategory.includes(key))!]
       : 'Other';
-
-    const newIssueId = `IS-${issues.length + 1}`;
     
     // We can't save the uploaded image, so we'll use a placeholder based on category.
     const placeholderId = `issue-${mappedCategory.toLowerCase().split(' ')[0]}`;
     const placeholder = PlaceHolderImages.find(p => p.id === placeholderId) || PlaceHolderImages[0];
 
 
-    const newIssue: Issue = {
-        id: newIssueId,
+    const newIssue: Omit<Issue, 'id' | '_id'> = {
         title: `${mappedCategory} at ${address}`,
         description,
         address,
@@ -95,9 +92,11 @@ export async function reportIssue(prevState: FormState, formData: FormData): Pro
         updatedAt: new Date().toISOString(),
         reporter: session.user as User,
     };
-
-    issues.unshift(newIssue);
     
+    const { db } = await connectToDatabase();
+    const result = await db.collection('issues').insertOne(newIssue);
+    const newIssueId = result.insertedId.toString();
+
     revalidatePath('/');
     revalidatePath('/issues');
     revalidatePath(`/issues/${newIssueId}`);

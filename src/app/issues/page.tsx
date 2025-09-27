@@ -1,12 +1,15 @@
 import IssueCard from '@/components/issues/IssueCard';
-import { issues } from '@/lib/data';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/layout/Header';
 import { getSession } from '@/lib/session';
+import { connectToDatabase } from '@/lib/mongodb';
+import type { Issue } from '@/lib/types';
 
 export default async function IssuesPage() {
-    const session = await getSession();
+  const session = await getSession();
+  const { db } = await connectToDatabase();
+  const issues = await db.collection('issues').find({}).sort({ reportedAt: -1 }).toArray();
 
   return (
     <>
@@ -23,7 +26,7 @@ export default async function IssuesPage() {
         </div>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {issues.map((issue) => (
-            <IssueCard key={issue.id} issue={issue} />
+            <IssueCard key={issue._id.toString()} issue={JSON.parse(JSON.stringify(issue))} />
           ))}
         </div>
       </div>

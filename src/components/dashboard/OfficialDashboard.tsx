@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   BarChart3, 
   Users, 
@@ -36,7 +36,6 @@ import {
   FileText
 } from 'lucide-react';
 import { departments as departmentList } from '@/lib/departments';
-import { issues as allIssues } from '@/lib/data'; // for filtering sidebar
 
 interface OfficialDashboardProps {
   user: User;
@@ -69,7 +68,7 @@ const getStatusColor = (status: string) => {
     }
 };
 
-export default function OfficialDashboard({ user, issues }: OfficialDashboardProps) {
+export default function OfficialDashboard({ user, issues: initialIssues }: OfficialDashboardProps) {
   const [activeTab, setActiveTab] = useState('Reported');
   const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
@@ -77,6 +76,12 @@ export default function OfficialDashboard({ user, issues }: OfficialDashboardPro
   const [filterCategory, setFilterCategory] = useState('');
   const [filterPriority, setFilterPriority] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [issues, setIssues] = useState(initialIssues);
+
+  useEffect(() => {
+    setIssues(initialIssues);
+  }, [initialIssues]);
+
   const [forwardData, setForwardData] = useState({
     assignedTo: '',
     department: '',
@@ -101,8 +106,8 @@ export default function OfficialDashboard({ user, issues }: OfficialDashboardPro
     ]
   };
 
-  const districts = [...new Set(allIssues.map(i => i.address.split(',')[1]?.trim()))].filter(Boolean);
-  const categories = [...new Set(allIssues.map(i => i.category))];
+  const districts = [...new Set(issues.map(i => i.address.split(',')[1]?.trim()))].filter(Boolean);
+  const categories = [...new Set(issues.map(i => i.category))];
 
   const filteredIssues = issues.filter(issue => {
     const matchesTab = activeTab === 'All' || issue.status === activeTab;
@@ -112,21 +117,23 @@ export default function OfficialDashboard({ user, issues }: OfficialDashboardPro
     const matchesSearch = !searchTerm || 
                          issue.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          issue.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         issue.id.toLowerCase().includes(searchTerm.toLowerCase());
+                         (issue as any)._id.toString().toLowerCase().includes(searchTerm.toLowerCase());
 
     return matchesTab && matchesDistrict && matchesCategory && matchesPriority && matchesSearch;
   });
 
   const handleForwardIssue = () => {
     if (!selectedIssue) return;
-    console.log('Forwarding issue:', selectedIssue.id, forwardData);
+    console.log('Forwarding issue:', (selectedIssue as any)._id, forwardData);
     // Here you would typically update the issue status and save it
     // For now, we'll just close the modal
-    const issueIndex = issues.findIndex(i => i.id === selectedIssue.id);
+    const issueIndex = issues.findIndex(i => (i as any)._id === (selectedIssue as any)._id);
     if (issueIndex > -1) {
-        issues[issueIndex].status = 'In Progress';
-        (issues[issueIndex] as any).assignedTo = forwardData.assignedTo;
-        (issues[issueIndex] as any).assignedDept = forwardData.department;
+        const newIssues = [...issues];
+        newIssues[issueIndex].status = 'In Progress';
+        (newIssues[issueIndex] as any).assignedTo = forwardData.assignedTo;
+        (newIssues[issueIndex] as any).assignedDept = forwardData.department;
+        setIssues(newIssues);
     }
 
     setShowForwardModal(false);
@@ -140,16 +147,15 @@ export default function OfficialDashboard({ user, issues }: OfficialDashboardPro
     });
   };
 
-  const IssueCard = ({ issue }: { issue: Issue }) => (
+  const IssueCard = ({ issue }: { issue: Issue & { _id: any } }) => (
     <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all cursor-pointer"
          onClick={() => setSelectedIssue(issue)}>
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-2">
-            <span className="text-sm font-mono text-gray-500">{issue.id}</span>
+            <span className="text-sm font-mono text-gray-500">{issue._id.toString()}</span>
             <Image className="w-4 h-4 text-blue-600" />
-            {/* Mock video icon logic */}
-            {issue.id === 'IS-2' && <Video className="w-4 h-4 text-purple-600" />}
+            {issue._id.toString().endsWith('2') && <Video className="w-4 h-4 text-purple-600" />}
           </div>
           <h3 className="font-semibold text-gray-900 text-lg mb-2">{issue.title}</h3>
           <p className="text-gray-600 text-sm line-clamp-2">{issue.description}</p>
@@ -338,7 +344,7 @@ export default function OfficialDashboard({ user, issues }: OfficialDashboardPro
         {/* Issues Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredIssues.map((issue) => (
-            <IssueCard key={issue.id} issue={issue} />
+            <IssueCard key={(issue as any)._id.toString()} issue={issue as Issue & { _id: any }} />
           ))}
         </div>
 
@@ -357,7 +363,7 @@ export default function OfficialDashboard({ user, issues }: OfficialDashboardPro
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-2xl font-bold text-card-foreground">{selectedIssue.title}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">ID: {selectedIssue.id}</p>
+                  <p className="text-sm text-muted-foreground mt-1">ID: {(selectedIssue as any)._id.toString()}</p>
                 </div>
                 <button
                   onClick={() => setSelectedIssue(null)}

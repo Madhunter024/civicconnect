@@ -1,7 +1,11 @@
 import IssueCard from '@/components/issues/IssueCard';
-import { issues } from '@/lib/data';
+import { connectToDatabase } from '@/lib/mongodb';
+import type { Issue } from '@/lib/types';
 
-export default function IssuesPage() {
+export default async function IssuesPage() {
+  const { db } = await connectToDatabase();
+  const issues = await db.collection('issues').find({}).sort({ reportedAt: -1 }).toArray();
+
   return (
     <div>
       <div className="text-left mb-8">
@@ -12,7 +16,7 @@ export default function IssuesPage() {
       </div>
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
         {issues.map((issue) => (
-          <IssueCard key={issue.id} issue={issue} />
+          <IssueCard key={issue._id.toString()} issue={JSON.parse(JSON.stringify(issue))} />
         ))}
       </div>
     </div>

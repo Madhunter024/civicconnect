@@ -6,7 +6,7 @@ import type { Issue } from '@/lib/types';
 import { MapPin } from 'lucide-react';
 
 interface IssueCardProps {
-  issue: Issue;
+  issue: Issue & { _id?: any };
 }
 
 const statusVariant: { [key: string]: "default" | "secondary" | "destructive" | "outline" } = {
@@ -17,6 +17,7 @@ const statusVariant: { [key: string]: "default" | "secondary" | "destructive" | 
 }
 
 export default function IssueCard({ issue }: IssueCardProps) {
+  const id = issue._id ? issue._id.toString() : issue.id;
   return (
     <Card className="flex flex-col h-full overflow-hidden transition-all hover:shadow-lg">
       <CardHeader>
@@ -34,7 +35,7 @@ export default function IssueCard({ issue }: IssueCardProps) {
             <Badge variant={statusVariant[issue.status]}>{issue.status}</Badge>
         </div>
         <CardTitle className="pt-2 font-headline leading-tight">
-          <Link href={`/issues/${issue.id}`} className="hover:text-primary transition-colors">
+          <Link href={`/issues/${id}`} className="hover:text-primary transition-colors">
             {issue.title}
           </Link>
         </CardTitle>

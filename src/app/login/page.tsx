@@ -47,7 +47,7 @@ export default function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="absolute top-4 left-4">
-            <Link href="/">
+            <Link href="/home">
                 <Logo />
             </Link>
         </div>

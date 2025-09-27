@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 
 const navLinks = [
-  { href: '/', label: 'Home' },
+  { href: '/home', label: 'Home' },
   { href: '/issues', label: 'View Issues' },
 ];
 
@@ -32,7 +32,7 @@ export default function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
-            <Link href="/" aria-label="CitizEngage Home">
+            <Link href="/home" aria-label="CitizEngage Home">
               <Logo />
             </Link>
           </div>

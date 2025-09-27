@@ -38,7 +38,7 @@ export default function DashboardLayout({
         </SidebarContent>
         <SidebarFooter>
           <Button variant="ghost" asChild>
-            <Link href="/">Back to Site</Link>
+            <Link href="/home">Back to Site</Link>
           </Button>
         </SidebarFooter>
       </Sidebar>

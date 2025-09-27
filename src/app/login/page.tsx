@@ -1,4 +1,3 @@
-
 'use client';
 import { useActionState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -15,10 +14,10 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import Logo from '@/components/layout/Logo';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { login } from '@/app/login/actions';
+import { BarChart3 } from 'lucide-react';
 
 
 export default function LoginPage() {
@@ -36,18 +35,26 @@ export default function LoginPage() {
     }, [state, router, toast]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="absolute top-4 left-4">
-            <Link href="/home">
-                <Logo />
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-orange-50 via-white to-green-50">
+        <div className="absolute top-6 left-6">
+            <Link href="/home" className="flex items-center space-x-3">
+              <div className="bg-gradient-to-r from-orange-600 to-green-600 p-2 rounded-xl shadow-lg">
+                <BarChart3 className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold bg-gradient-to-r from-orange-600 to-green-600 bg-clip-text text-transparent">
+                  Civic Connect
+                </h1>
+                <p className="text-xs text-gray-600">झारखंड सरकार</p>
+              </div>
             </Link>
         </div>
-        <Card className="w-full max-w-sm">
+        <Card className="w-full max-w-sm shadow-2xl border-gray-200/50">
             <form action={formAction}>
                 <CardHeader>
-                    <CardTitle className="text-2xl">Login</CardTitle>
+                    <CardTitle className="text-2xl font-bold text-gray-900">Login to Your Account</CardTitle>
                     <CardDescription>
-                    Enter your username and password to access your dashboard.
+                     Enter your credentials to access your dashboard.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4">
@@ -61,12 +68,12 @@ export default function LoginPage() {
                     </div>
                 </CardContent>
                 <CardFooter className="flex-col items-start gap-4">
-                    <Button className="w-full" disabled={isPending}>
+                    <Button className="w-full bg-gradient-to-r from-orange-600 to-green-600 text-white font-semibold hover:from-orange-700 hover:to-green-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all" disabled={isPending}>
                         {isPending ? 'Signing In...' : 'Sign in'}
                     </Button>
-                     <p className="text-sm text-center w-full">
+                     <p className="text-sm text-center w-full text-gray-600">
                         Don't have an account?{' '}
-                        <Link href="/signup" className="font-medium text-primary hover:underline">
+                        <Link href="/signup" className="font-medium text-orange-600 hover:underline">
                             Sign up
                         </Link>
                     </p>

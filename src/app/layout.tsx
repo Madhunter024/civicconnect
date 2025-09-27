@@ -2,18 +2,21 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
+import { getSession } from '@/lib/session';
 import Header from '@/components/layout/Header';
 
-export const metadata: Metadata = {
-  title: 'CitizEngage',
-  description: 'Report civic issues and track their resolution.',
+export const metadata = {
+  title: 'Civic Connect - Jharkhand',
+  description: 'Report civic issues and track their resolution in Jharkhand.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getSession();
+  
   return (
     <html lang="en" className="h-full">
       <head>
@@ -24,9 +27,12 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={cn('font-body antialiased', 'h-full bg-background')}>
+      <body className={cn('font-body antialiased', 'h-full flex flex-col')}>
+        <Header user={session.user} />
+        <main className="flex-1">
+          {children}
+        </main>
         <Toaster />
-        {children}
       </body>
     </html>
   );

@@ -8,6 +8,7 @@ import Dashboard from '@/components/home/Dashboard';
 import { summarizeIssueReports } from '@/ai/flows/summarize-issue-reports';
 import ClientDashboard from '@/components/dashboard/ClientDashboard';
 import { redirect } from 'next/navigation';
+import OfficialDashboard from '@/components/dashboard/OfficialDashboard';
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -35,8 +36,13 @@ export default async function DashboardPage() {
 
     return <ClientDashboard summary={summary} issues={issues} analyticsData={analyticsData} />;
   }
+  
+  if (user.role === 'official') {
+    const departmentIssues = issues.filter(issue => issue.department === user.department);
+    return <OfficialDashboard user={user} issues={departmentIssues} />;
+  }
 
-  // For citizens and officials, show their personalized dashboard
+  // For citizens, show their personalized dashboard
   const userIssues = issues.filter(issue => issue.reporter.username === user.username);
   const pendingIssues = userIssues.filter(issue => issue.status !== 'Resolved' && issue.status !== 'Rejected');
   const resolvedIssues = userIssues.filter(issue => issue.status === 'Resolved');

@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import type { Issue, User } from '@/lib/types';
 import { 
   AlertCircle, 
@@ -9,16 +9,11 @@ import {
   Plus, 
   Calendar, 
   MapPin, 
-  User as UserIcon,
   Clock,
   BarChart3,
-  X,
-  Camera,
-  Send,
   LogOut,
   List,
-  FilePlus2,
-  LayoutDashboard
+  FilePlus2
 } from 'lucide-react';
 import Link from 'next/link';
 import { logout } from '@/app/login/actions';
@@ -31,7 +26,6 @@ interface DashboardProps {
 }
 
 const Dashboard = ({ user, pendingIssues, resolvedIssues }: DashboardProps) => {
-  const [activeTab, setActiveTab] = useState('overview');
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -113,14 +107,8 @@ const Dashboard = ({ user, pendingIssues, resolvedIssues }: DashboardProps) => {
            </div>
            <nav className="flex-grow p-4">
               <div className="space-y-2">
-                <Button variant={activeTab === 'overview' ? 'secondary' : 'ghost'} className="w-full justify-start" onClick={() => setActiveTab('overview')}>
-                  <LayoutDashboard className="mr-2" /> Overview
-                </Button>
-                <Button variant={activeTab === 'pending' ? 'secondary' : 'ghost'} className="w-full justify-start" onClick={() => setActiveTab('pending')}>
-                  <Clock className="mr-2" /> Pending Issues
-                </Button>
-                 <Button variant={activeTab === 'resolved' ? 'secondary' : 'ghost'} className="w-full justify-start" onClick={() => setActiveTab('resolved')}>
-                  <CheckCircle className="mr-2" /> Resolved Issues
+                <Button variant="secondary" className="w-full justify-start">
+                  <BarChart3 className="mr-2" /> Overview
                 </Button>
                 <Button variant="ghost" className="w-full justify-start" asChild>
                   <Link href="/dashboard/report"><FilePlus2 className="mr-2" /> Report an Issue</Link>
@@ -159,80 +147,47 @@ const Dashboard = ({ user, pendingIssues, resolvedIssues }: DashboardProps) => {
             </div>
           </header>
 
-          <main className="flex-1 p-6 bg-background">
-            {/* Overview Tab */}
-            {activeTab === 'overview' && (
-              <div className="space-y-8">
-                {/* Statistics Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-card rounded-xl p-6 border border-border">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-muted-foreground text-sm font-medium">Pending Issues</p>
-                        <p className="text-3xl font-bold text-foreground">{pendingIssues.length}</p>
-                      </div>
-                      <div className="p-3 bg-orange-100 rounded-lg">
-                        <AlertCircle className="w-6 h-6 text-orange-500" />
-                      </div>
+          <main className="flex-1 p-6 bg-background space-y-8">
+              {/* Statistics Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-card rounded-xl p-6 border border-border">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-muted-foreground text-sm font-medium">Pending Issues</p>
+                      <p className="text-3xl font-bold text-foreground">{pendingIssues.length}</p>
                     </div>
-                  </div>
-                  
-                  <div className="bg-card rounded-xl p-6 border border-border">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-muted-foreground text-sm font-medium">Resolved Issues</p>
-                        <p className="text-3xl font-bold text-foreground">{resolvedIssues.length}</p>
-                      </div>
-                       <div className="p-3 bg-green-100 rounded-lg">
-                        <CheckCircle className="w-6 h-6 text-green-500" />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-card rounded-xl p-6 border border-border">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-muted-foreground text-sm font-medium">Resolution Rate</p>
-                        <p className="text-3xl font-bold text-foreground">{resolutionRate}%</p>
-                      </div>
-                       <div className="p-3 bg-blue-100 rounded-lg">
-                        <BarChart3 className="w-6 h-6 text-blue-500" />
-                      </div>
+                    <div className="p-3 bg-orange-100 rounded-lg">
+                      <AlertCircle className="w-6 h-6 text-orange-500" />
                     </div>
                   </div>
                 </div>
-
-                {/* Recent Activity */}
+                
                 <div className="bg-card rounded-xl p-6 border border-border">
-                  <h2 className="text-xl font-bold text-foreground mb-4">Your Recent Activity</h2>
-                  <div className="space-y-3">
-                    {[...pendingIssues, ...resolvedIssues]
-                        .sort((a,b) => new Date(b.reportedAt).getTime() - new Date(a.reportedAt).getTime())
-                        .slice(0, 3).map((issue) => (
-                      <div key={issue.id} className="flex items-center space-x-4 p-3 bg-background rounded-lg">
-                        <div className="flex-shrink-0">
-                          {resolvedIssues.some(r => r.id === issue.id) ? (
-                            <div className="p-2 bg-green-100 rounded-full"><CheckCircle className="w-5 h-5 text-green-500" /></div>
-                          ) : (
-                             <div className="p-2 bg-orange-100 rounded-full"><Clock className="w-5 h-5 text-orange-500" /></div>
-                          )}
-                        </div>
-                        <div className="flex-1">
-                           <Link href={`/issues/${issue.id}`} className="font-medium text-foreground hover:underline">{issue.title}</Link>
-                          <p className="text-sm text-muted-foreground">{issue.address}</p>
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          {new Date(issue.reportedAt).toLocaleDateString()}
-                        </div>
-                      </div>
-                    ))}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-muted-foreground text-sm font-medium">Resolved Issues</p>
+                      <p className="text-3xl font-bold text-foreground">{resolvedIssues.length}</p>
+                    </div>
+                     <div className="p-3 bg-green-100 rounded-lg">
+                      <CheckCircle className="w-6 h-6 text-green-500" />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-card rounded-xl p-6 border border-border">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-muted-foreground text-sm font-medium">Resolution Rate</p>
+                      <p className="text-3xl font-bold text-foreground">{resolutionRate}%</p>
+                    </div>
+                     <div className="p-3 bg-blue-100 rounded-lg">
+                      <BarChart3 className="w-6 h-6 text-blue-500" />
+                    </div>
                   </div>
                 </div>
               </div>
-            )}
 
-            {/* Pending Issues Tab */}
-            {activeTab === 'pending' && (
+              {/* Pending Issues */}
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h2 className="text-2xl font-bold text-foreground">Your Pending Issues</h2>
@@ -240,16 +195,20 @@ const Dashboard = ({ user, pendingIssues, resolvedIssues }: DashboardProps) => {
                     {pendingIssues.length} Active
                   </span>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {pendingIssues.map((issue) => (
-                    <IssueCard key={issue.id} issue={issue} />
-                  ))}
-                </div>
+                {pendingIssues.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {pendingIssues.map((issue) => (
+                        <IssueCard key={issue.id} issue={issue} />
+                    ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-12 bg-card rounded-xl border border-border">
+                        <p className="text-muted-foreground">You have no pending issues.</p>
+                    </div>
+                )}
               </div>
-            )}
 
-            {/* Resolved Issues Tab */}
-            {activeTab === 'resolved' && (
+              {/* Resolved Issues */}
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h2 className="text-2xl font-bold text-foreground">Your Resolved Issues</h2>
@@ -257,13 +216,18 @@ const Dashboard = ({ user, pendingIssues, resolvedIssues }: DashboardProps) => {
                     {resolvedIssues.length} Completed
                   </span>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {resolvedIssues.map((issue) => (
-                    <IssueCard key={issue.id} issue={issue} isResolved={true} />
-                  ))}
-                </div>
+                {resolvedIssues.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {resolvedIssues.map((issue) => (
+                        <IssueCard key={issue.id} issue={issue} isResolved={true} />
+                    ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-12 bg-card rounded-xl border border-border">
+                        <p className="text-muted-foreground">You have no resolved issues yet.</p>
+                    </div>
+                )}
               </div>
-            )}
           </main>
         </div>
       </div>

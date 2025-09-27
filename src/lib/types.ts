@@ -21,6 +21,7 @@ export interface Issue {
   category: IssueCategory;
   status: IssueStatus;
   address: string;
+  department: string;
   location: {
     lat: number;
     lng: number;

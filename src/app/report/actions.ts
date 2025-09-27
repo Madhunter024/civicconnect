@@ -12,6 +12,7 @@ import { getSession } from '@/lib/session';
 const formSchema = z.object({
   description: z.string(),
   address: z.string(),
+  department: z.string(),
   photo: z.instanceof(File),
   lat: z.coerce.number(),
   lng: z.coerce.number(),
@@ -42,6 +43,7 @@ export async function reportIssue(prevState: FormState, formData: FormData): Pro
   const validatedFields = formSchema.safeParse({
     description: formData.get('description'),
     address: formData.get('address'),
+    department: formData.get('department'),
     photo: formData.get('photo'),
     lat: formData.get('lat'),
     lng: formData.get('lng'),
@@ -55,7 +57,7 @@ export async function reportIssue(prevState: FormState, formData: FormData): Pro
     };
   }
   
-  const { description, address, photo, lat, lng } = validatedFields.data;
+  const { description, address, department, photo, lat, lng } = validatedFields.data;
 
   try {
     const buffer = Buffer.from(await photo.arrayBuffer());
@@ -85,6 +87,7 @@ export async function reportIssue(prevState: FormState, formData: FormData): Pro
         address,
         category: mappedCategory,
         status: 'Reported',
+        department,
         location: { lat, lng },
         imageUrl: placeholder.imageUrl,
         imageHint: placeholder.imageHint,

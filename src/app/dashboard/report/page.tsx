@@ -12,14 +12,17 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { ArrowRight, Camera, MapPin } from 'lucide-react';
+import { ArrowRight, Camera, MapPin, Building2 } from 'lucide-react';
 import Image from 'next/image';
 import IssueMap from '@/components/issues/IssueMap';
 import { useDebounce } from 'use-debounce';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { departments } from '@/lib/departments';
 
 const formSchema = z.object({
   description: z.string().min(10, 'Please provide a detailed description.').max(500),
   address: z.string().min(5, 'Please provide a valid address or cross-street.'),
+  department: z.string({ required_error: 'Please select a department.' }),
   photo: z.instanceof(File).refine((file) => file.size > 0, 'A photo is required.'),
   lat: z.coerce.number(),
   lng: z.coerce.number(),
@@ -49,6 +52,7 @@ export default function ReportPage() {
     defaultValues: {
       description: '',
       address: '',
+      department: undefined,
       photo: undefined,
       lat: defaultLocation.lat,
       lng: defaultLocation.lng,
@@ -124,6 +128,32 @@ export default function ReportPage() {
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="department"
+                render={({ field }) => (
+                  <FormItem>
+                     <FormLabel className="flex items-center gap-2"><Building2 className="w-4 h-4" /> Department</FormLabel>
+                     <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select the relevant department" />
+                            </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                            {departments.map((dept) => (
+                                <SelectItem key={dept.name} value={dept.name}>
+                                    {dept.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                     </Select>
+                     <FormDescription>This helps route your issue to the correct officials.</FormDescription>
+                     <FormMessage />
+                  </FormItem>
+                )}
+               />
 
               <FormField
                 control={form.control}

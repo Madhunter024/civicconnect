@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Calendar, User } from 'lucide-react';
+import { MapPin, Calendar, User, Building2 } from 'lucide-react';
 import StatusTracker from '@/components/issues/StatusTracker';
 import IssueMap from '@/components/issues/IssueMap';
 import Header from '@/components/layout/Header';
@@ -81,6 +81,13 @@ export default async function IssueDetailPage({ params }: { params: { id: string
                           <div>
                               <p className="font-semibold">Location</p>
                               <p className="text-muted-foreground">{issue.address}</p>
+                          </div>
+                      </div>
+                       <div className="flex items-start gap-3">
+                          <Building2 className="w-5 h-5 text-muted-foreground mt-0.5" />
+                          <div>
+                              <p className="font-semibold">Department</p>
+                              <p className="text-muted-foreground">{issue.department}</p>
                           </div>
                       </div>
                        <div className="flex items-start gap-3">

@@ -53,8 +53,8 @@ export default function Home() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Button size="lg" asChild>
-              <Link href="/report">
-                Report an Issue
+              <Link href="/login">
+                Get Started
                 <ArrowRight className="ml-2" />
               </Link>
             </Button>

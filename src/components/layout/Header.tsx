@@ -5,15 +5,27 @@ import Logo from '@/components/layout/Logo';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { usePathname } from 'next/navigation';
 
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/issues', label: 'View Issues' },
-  { href: '/dashboard', label: 'Dashboard' },
 ];
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Don't render header on dashboard pages
+  if (pathname.startsWith('/dashboard')) {
+    return null;
+  }
+  
+  // Don't render header on login page
+  if(pathname.startsWith('/login')){
+    return null;
+  }
+
 
   return (
     <header className="bg-card shadow-md sticky top-0 z-50">
@@ -31,7 +43,7 @@ export default function Header() {
               </Button>
             ))}
             <Button asChild>
-              <Link href="/report">Report an Issue</Link>
+              <Link href="/login">Dashboard Login</Link>
             </Button>
           </nav>
           <div className="md:hidden flex items-center">
@@ -55,7 +67,7 @@ export default function Header() {
               </Button>
             ))}
             <Button asChild className="w-full">
-              <Link href="/report" onClick={() => setIsOpen(false)}>Report an Issue</Link>
+              <Link href="/login" onClick={() => setIsOpen(false)}>Dashboard Login</Link>
             </Button>
           </nav>
         </div>

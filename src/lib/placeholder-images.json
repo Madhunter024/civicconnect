@@ -1,3 +1,40 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-background",
+      "description": "A vibrant city street with clear blue skies, representing a well-maintained urban environment.",
+      "imageUrl": "https://images.unsplash.com/photo-1726688203462-927759764ed6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y2l0eSUyMHN0cmVldHxlbnwwfHx8fDE3NTg4OTU3MTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "city street"
+    },
+    {
+      "id": "dashboard-map",
+      "description": "A stylized map of a city, ready for issue pins.",
+      "imageUrl": "https://images.unsplash.com/photo-1717700299581-c2fc3fad4ee8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjaXR5JTIwbWFwfGVufDB8fHx8MTc1ODk3NjgzMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "city map"
+    },
+    {
+      "id": "issue-pothole",
+      "description": "A car wheel hitting a pothole on a paved road.",
+      "imageUrl": "https://images.unsplash.com/photo-1730674337922-0bf08006a66a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwb3Rob2xlJTIwcm9hZHxlbnwwfHx8fDE3NTg5NTE4NDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "pothole road"
+    },
+    {
+      "id": "issue-graffiti",
+      "description": "Colorful graffiti on a brick wall.",
+      "imageUrl": "https://images.unsplash.com/photo-1611063158871-7dd3ed4a2ac8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxncmFmZml0aSUyMHdhbGx8ZW58MHx8fHwxNzU4OTUyMjQ5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "graffiti wall"
+    },
+    {
+      "id": "issue-streetlight",
+      "description": "A broken streetlight during the day.",
+      "imageUrl": "https://images.unsplash.com/photo-1527517206216-838569b44110?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8YnJva2VuJTIwc3RyZWV0bGlnaHR8ZW58MHx8fHwxNzU4ODU0ODQ2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "broken streetlight"
+    },
+    {
+      "id": "issue-trash",
+      "description": "An overflowing public trash can on a sidewalk.",
+      "imageUrl": "https://images.unsplash.com/photo-1707038368897-ccac635fbbd3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxvdmVyZmxvd2luZyUyMHRyYXNofGVufDB8fHx8MTc1ODg5MDQ1OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "overflowing trash"
+    }
+  ]
 }

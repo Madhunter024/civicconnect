@@ -805,8 +805,8 @@ export default function ClientDashboard({ summary, issues: allIssues, users, ana
               {activeSection === 'issues' && renderIssueManagement()}
               {activeSection === 'users' && renderUserManagement()}
               {activeSection === 'departments' && renderDepartmentControl()}
-              {active-section === 'analytics' && renderAnalytics()}
-              {active-section === 'system' && renderSystemSettings()}
+              {activeSection === 'analytics' && renderAnalytics()}
+              {activeSection === 'system' && renderSystemSettings()}
             </div>
           </main>
       </div>
@@ -912,4 +912,3 @@ export default function ClientDashboard({ summary, issues: allIssues, users, ana
     </div>
   );
 };
-```

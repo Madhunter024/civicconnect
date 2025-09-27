@@ -12,6 +12,8 @@ const formSchema = z.object({
   description: z.string(),
   address: z.string(),
   photo: z.instanceof(File),
+  lat: z.coerce.number(),
+  lng: z.coerce.number(),
 });
 
 type FormState = {
@@ -31,16 +33,19 @@ export async function reportIssue(prevState: FormState, formData: FormData): Pro
     description: formData.get('description'),
     address: formData.get('address'),
     photo: formData.get('photo'),
+    lat: formData.get('lat'),
+    lng: formData.get('lng'),
   });
 
   if (!validatedFields.success) {
+    console.log(validatedFields.error.errors);
     return {
       message: 'Invalid form data. Please check your inputs.',
       success: false,
     };
   }
   
-  const { description, address, photo } = validatedFields.data;
+  const { description, address, photo, lat, lng } = validatedFields.data;
 
   try {
     const buffer = Buffer.from(await photo.arrayBuffer());
@@ -70,7 +75,7 @@ export async function reportIssue(prevState: FormState, formData: FormData): Pro
         address,
         category: mappedCategory,
         status: 'Reported',
-        location: { lat: 34.0522 + (Math.random() - 0.5) * 0.02, lng: -118.2437 + (Math.random() - 0.5) * 0.02 }, // Randomize location slightly for demo
+        location: { lat, lng },
         imageUrl: placeholder.imageUrl,
         imageHint: placeholder.imageHint,
         reportedAt: new Date().toISOString(),
@@ -94,4 +99,25 @@ export async function reportIssue(prevState: FormState, formData: FormData): Pro
       success: false,
     };
   }
+}
+
+export async function geocodeAddress(address: string): Promise<{lat: number, lng: number} | null> {
+    if (!process.env.GOOGLE_MAPS_API_KEY) {
+        console.error('Google Maps API key is missing.');
+        return null;
+    }
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
+    
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.status === 'OK' && data.results[0]) {
+            return data.results[0].geometry.location;
+        }
+        return null;
+    } catch(error) {
+        console.error('Geocoding error:', error);
+        return null;
+    }
 }

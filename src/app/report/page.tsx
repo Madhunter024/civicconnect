@@ -4,21 +4,25 @@ import { useActionState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { reportIssue } from '@/app/report/actions';
+import { reportIssue, geocodeAddress } from '@/app/report/actions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { ArrowRight, Camera, MapPin } from 'lucide-react';
 import Image from 'next/image';
+import IssueMap from '@/components/issues/IssueMap';
+import { useDebounce } from 'use-debounce';
 
 const formSchema = z.object({
   description: z.string().min(10, 'Please provide a detailed description.').max(500),
   address: z.string().min(5, 'Please provide a valid address or cross-street.'),
   photo: z.instanceof(File).refine((file) => file.size > 0, 'A photo is required.'),
+  lat: z.coerce.number(),
+  lng: z.coerce.number(),
 });
 
 type FormState = {
@@ -31,10 +35,14 @@ const initialState: FormState = {
     success: false,
 };
 
+// Default center for the map (e.g., Los Angeles)
+const defaultLocation = { lat: 34.0522, lng: -118.2437 };
+
 export default function ReportPage() {
   const [state, formAction] = useActionState(reportIssue, initialState);
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
+  const [mapCenter, setMapCenter] = useState(defaultLocation);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,11 +50,33 @@ export default function ReportPage() {
       description: '',
       address: '',
       photo: undefined,
+      lat: defaultLocation.lat,
+      lng: defaultLocation.lng,
     },
   });
 
   const photoRef = form.register('photo');
   const photo = form.watch('photo');
+  const address = form.watch('address');
+
+  const [debouncedAddress] = useDebounce(address, 500);
+
+  const updateMapLocation = useCallback(async (addr: string) => {
+    if (addr) {
+      const location = await geocodeAddress(addr);
+      if (location) {
+        setMapCenter(location);
+        form.setValue('lat', location.lat);
+        form.setValue('lng', location.lng);
+      }
+    }
+  }, [form]);
+
+  useEffect(() => {
+    if (debouncedAddress) {
+      updateMapLocation(debouncedAddress);
+    }
+  }, [debouncedAddress, updateMapLocation]);
   
   useEffect(() => {
     if (state.message) {
@@ -57,6 +87,7 @@ export default function ReportPage() {
         });
         form.reset();
         formRef.current?.reset();
+        setMapCenter(defaultLocation);
       } else {
         toast({
           title: 'Error',
@@ -108,6 +139,10 @@ export default function ReportPage() {
                   </FormItem>
                 )}
               />
+              
+              <div className="h-64 w-full rounded-lg overflow-hidden">
+                <IssueMap lat={mapCenter.lat} lng={mapCenter.lng} zoom={15} />
+              </div>
 
               <FormField
                 control={form.control}
@@ -128,6 +163,9 @@ export default function ReportPage() {
                     </FormItem>
                 )}
                />
+
+              <FormField name="lat" control={form.control} render={({ field }) => <input type="hidden" {...field} />} />
+              <FormField name="lng" control={form.control} render={({ field }) => <input type="hidden" {...field} />} />
 
               <Button type="submit" size="lg" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting ? 'Submitting...' : 'Submit Report'}

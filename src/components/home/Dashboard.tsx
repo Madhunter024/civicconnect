@@ -91,7 +91,7 @@ const Dashboard = ({ user, pendingIssues, resolvedIssues }: DashboardProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="flex min-h-screen">
+      <div className="flex min-h-[calc(100vh-4rem)]">
         {/* Sidebar */}
         <aside className="w-64 flex-shrink-0 bg-card border-r hidden md:flex flex-col">
            <div className="h-16 flex items-center px-6 border-b">

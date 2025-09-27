@@ -27,6 +27,7 @@ import {
   Mountain
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Logo from '../layout/Logo';
 
 const LandingPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -128,17 +129,7 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <div className="flex items-center space-x-3">
-              <div className="bg-gradient-to-r from-orange-600 to-green-600 p-2 rounded-xl shadow-lg">
-                <BarChart3 className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-lg font-bold bg-gradient-to-r from-orange-600 to-green-600 bg-clip-text text-transparent">
-                  Civic Connect
-                </h1>
-                <p className="text-xs text-gray-600">झारखंड सरकार</p>
-              </div>
-            </div>
+            <Logo />
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
@@ -333,7 +324,7 @@ const LandingPage = () => {
                 <p className="text-white mb-6 leading-relaxed">"{testimonial.content}"</p>
                 <div>
                   <div className="font-semibold text-white">{testimonial.name}</div>
-                  <div className="text-orange-100 text-sm">{testimonial.role}</div>
+                  <div className="text-gray-300 text-sm">{testimonial.role}</div>
                 </div>
               </div>
             ))}
@@ -366,20 +357,12 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-gray-900 text-white py-12" id="contact">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="bg-gradient-to-r from-orange-600 to-green-600 p-2 rounded-xl">
-                  <BarChart3 className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold">Civic Connect</h3>
-                  <p className="text-gray-400 text-sm">झारखंड सरकार</p>
-                </div>
-              </div>
-              <p className="text-gray-400 mb-4 max-w-md">
+              <Logo />
+              <p className="text-gray-400 mb-4 max-w-md mt-4">
                 Government of Jharkhand's digital platform for citizen engagement and transparent governance across all 24 districts.
               </p>
               <p className="text-sm text-gray-400 mb-4">

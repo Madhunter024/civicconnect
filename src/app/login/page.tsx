@@ -19,6 +19,7 @@ import Link from 'next/link';
 import { login } from '@/app/login/actions';
 import { BarChart3 } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import Logo from '@/components/layout/Logo';
 
 
 export default function LoginPage() {
@@ -38,17 +39,7 @@ export default function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-orange-50 via-white to-green-50">
         <div className="absolute top-6 left-6">
-            <Link href="/home" className="flex items-center space-x-3">
-              <div className="bg-gradient-to-r from-orange-600 to-green-600 p-2 rounded-xl shadow-lg">
-                <BarChart3 className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-lg font-bold bg-gradient-to-r from-orange-600 to-green-600 bg-clip-text text-transparent">
-                  Civic Connect
-                </h1>
-                <p className="text-xs text-gray-600">झारखंड सरकार</p>
-              </div>
-            </Link>
+            <Logo />
         </div>
         <Card className="w-full max-w-sm shadow-2xl border-gray-200/50">
             <form action={formAction}>

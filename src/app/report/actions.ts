@@ -12,6 +12,13 @@ import { connectToDatabase } from '@/lib/mongodb';
 const formSchema = z.object({
   description: z.string(),
   address: z.string(),
+  place: z.string(),
+  district: z.string(),
+  block: z.string(),
+  pincode: z.string(),
+  policeStation: z.string(),
+  fatherName: z.string(),
+  motherName: z.string(),
   department: z.string(),
   photo: z.instanceof(File),
   lat: z.coerce.number(),
@@ -43,6 +50,13 @@ export async function reportIssue(prevState: FormState, formData: FormData): Pro
   const validatedFields = formSchema.safeParse({
     description: formData.get('description'),
     address: formData.get('address'),
+    place: formData.get('place'),
+    district: formData.get('district'),
+    block: formData.get('block'),
+    pincode: formData.get('pincode'),
+    policeStation: formData.get('policeStation'),
+    fatherName: formData.get('fatherName'),
+    motherName: formData.get('motherName'),
     department: formData.get('department'),
     photo: formData.get('photo'),
     lat: formData.get('lat'),
@@ -57,7 +71,7 @@ export async function reportIssue(prevState: FormState, formData: FormData): Pro
     };
   }
   
-  const { description, address, department, photo, lat, lng } = validatedFields.data;
+  const { description, address, place, district, block, pincode, policeStation, fatherName, motherName, department, photo, lat, lng } = validatedFields.data;
 
   try {
     const buffer = Buffer.from(await photo.arrayBuffer());
@@ -82,6 +96,13 @@ export async function reportIssue(prevState: FormState, formData: FormData): Pro
         title: `${mappedCategory} at ${address}`,
         description,
         address,
+        place,
+        district,
+        block,
+        pincode,
+        policeStation,
+        fatherName,
+        motherName,
         category: mappedCategory,
         status: 'Reported',
         department,

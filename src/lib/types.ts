@@ -22,6 +22,13 @@ export interface Issue {
   category: IssueCategory;
   status: IssueStatus;
   address: string;
+  place: string;
+  district: string;
+  block: string;
+  pincode: string;
+  policeStation: string;
+  fatherName: string;
+  motherName: string;
   department: string;
   location: {
     lat: number;

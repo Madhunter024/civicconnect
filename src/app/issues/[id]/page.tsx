@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Calendar, User, Building2 } from 'lucide-react';
+import { MapPin, Calendar, User, Building2, Home, Pin, Shield } from 'lucide-react';
 import StatusTracker from '@/components/issues/StatusTracker';
 import IssueMap from '@/components/issues/IssueMap';
 import Header from '@/components/layout/Header';
@@ -88,6 +88,34 @@ export default async function IssueDetailPage({ params }: { params: { id: string
                               <p className="text-muted-foreground">{typedIssue.address}</p>
                           </div>
                       </div>
+                      <div className="flex items-start gap-3">
+                          <Home className="w-5 h-5 text-muted-foreground mt-0.5" />
+                          <div>
+                              <p className="font-semibold">Place/Area</p>
+                              <p className="text-muted-foreground">{typedIssue.place}</p>
+                          </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                          <Building2 className="w-5 h-5 text-muted-foreground mt-0.5" />
+                          <div>
+                              <p className="font-semibold">District & Block</p>
+                              <p className="text-muted-foreground">{typedIssue.district}, {typedIssue.block}</p>
+                          </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                          <Pin className="w-5 h-5 text-muted-foreground mt-0.5" />
+                          <div>
+                              <p className="font-semibold">Pincode</p>
+                              <p className="text-muted-foreground">{typedIssue.pincode}</p>
+                          </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                          <Shield className="w-5 h-5 text-muted-foreground mt-0.5" />
+                          <div>
+                              <p className="font-semibold">Police Station</p>
+                              <p className="text-muted-foreground">{typedIssue.policeStation}</p>
+                          </div>
+                      </div>
                        <div className="flex items-start gap-3">
                           <Building2 className="w-5 h-5 text-muted-foreground mt-0.5" />
                           <div>
@@ -113,6 +141,8 @@ export default async function IssueDetailPage({ params }: { params: { id: string
                                   </Avatar>
                                   <p className="text-muted-foreground">{typedIssue.reporter.name}</p>
                               </div>
+                              <p className="text-muted-foreground mt-2">S/O: {typedIssue.fatherName}</p>
+                              <p className="text-muted-foreground">M/O: {typedIssue.motherName}</p>
                           </div>
                       </div>
                   </CardContent>

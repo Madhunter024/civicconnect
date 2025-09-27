@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { ArrowRight, Camera, MapPin, Building2 } from 'lucide-react';
+import { ArrowRight, Camera, MapPin, Building2, User, Home, Building, Pin, Shield } from 'lucide-react';
 import Image from 'next/image';
 import IssueMap from '@/components/issues/IssueMap';
 import { useDebounce } from 'use-debounce';
@@ -22,6 +22,13 @@ import { departments } from '@/lib/departments';
 const formSchema = z.object({
   description: z.string().min(10, 'Please provide a detailed description.').max(500),
   address: z.string().min(5, 'Please provide a valid address or cross-street.'),
+  place: z.string().min(3, 'Please provide a place/area name.'),
+  district: z.string().min(3, 'Please provide a district name.'),
+  block: z.string().min(3, 'Please provide a block name.'),
+  pincode: z.string().length(6, 'Please provide a valid 6-digit pincode.'),
+  policeStation: z.string().min(3, 'Please provide a police station name.'),
+  fatherName: z.string().min(3, "Please provide father's name."),
+  motherName: z.string().min(3, "Please provide mother's name."),
   department: z.string({ required_error: 'Please select a department.' }),
   photo: z.instanceof(File).refine((file) => file.size > 0, 'A photo is required.'),
   lat: z.coerce.number(),
@@ -52,6 +59,13 @@ export default function ReportPage() {
     defaultValues: {
       description: '',
       address: '',
+      place: '',
+      district: '',
+      block: '',
+      pincode: '',
+      policeStation: '',
+      fatherName: '',
+      motherName: '',
       department: undefined,
       photo: undefined,
       lat: defaultLocation.lat,
@@ -129,6 +143,35 @@ export default function ReportPage() {
                 )}
               />
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <FormField
+                  control={form.control}
+                  name="fatherName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2"><User className="w-4 h-4" /> Father's Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., Ramesh Kumar" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="motherName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2"><User className="w-4 h-4" /> Mother's Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., Sunita Devi" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <FormField
                 control={form.control}
                 name="department"
@@ -160,7 +203,7 @@ export default function ReportPage() {
                 name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="flex items-center gap-2"><MapPin className="w-4 h-4" /> Location</FormLabel>
+                    <FormLabel className="flex items-center gap-2"><MapPin className="w-4 h-4" /> Address/Street</FormLabel>
                     <FormControl>
                       <Input placeholder="e.g., 123 Main St, Springfield" {...field} />
                     </FormControl>
@@ -169,6 +212,74 @@ export default function ReportPage() {
                   </FormItem>
                 )}
               />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <FormField
+                  control={form.control}
+                  name="place"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2"><Home className="w-4 h-4" /> Place/Area</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., Harmu Housing Colony" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="district"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2"><Building className="w-4 h-4" /> District</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., Ranchi" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="block"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2"><Building className="w-4 h-4" /> Block</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., Kanke" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="pincode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2"><Pin className="w-4 h-4" /> Pincode</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., 834001" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="policeStation"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2"><Shield className="w-4 h-4" /> Police Station</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., Gonda Thana" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               
               <div className="h-64 w-full rounded-lg overflow-hidden">
                 <IssueMap lat={mapCenter.lat} lng={mapCenter.lng} zoom={15} />

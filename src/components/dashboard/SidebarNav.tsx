@@ -7,7 +7,7 @@ import {
 import { LayoutDashboard, List, FilePlus2, BarChart3, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import { logout } from '@/app/login/actions';
 
 const menuItems = [
   {
@@ -28,13 +28,6 @@ const menuItems = [
 ];
 export function SidebarNav() {
   const pathname = usePathname();
-  const router = useRouter();
-
-  const handleLogout = (e: React.MouseEvent) => {
-    e.preventDefault();
-    document.cookie = 'auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    router.push('/login');
-  };
 
   return (
     <SidebarMenu>
@@ -52,14 +45,17 @@ export function SidebarNav() {
         </SidebarMenuItem>
       ))}
        <SidebarMenuItem>
-          <a href="#" onClick={handleLogout}>
-            <SidebarMenuButton
-              icon={<LogOut />}
-              tooltip="Logout"
-            >
-              <span>Logout</span>
-            </SidebarMenuButton>
-          </a>
+          <form action={logout}>
+            <button type="submit" className="w-full">
+              <SidebarMenuButton
+                icon={<LogOut />}
+                tooltip="Logout"
+                className="w-full"
+              >
+                <span>Logout</span>
+              </SidebarMenuButton>
+            </button>
+          </form>
         </SidebarMenuItem>
     </SidebarMenu>
   );

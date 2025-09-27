@@ -18,29 +18,20 @@ import { Label } from "@/components/ui/label"
 import Logo from '@/components/layout/Logo';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
-
-async function loginAction(prevState: any, formData: FormData) {
-    const email = formData.get('email');
-    // In a real app, you'd validate credentials here
-    if (email) {
-        document.cookie = 'auth=true; path=/; max-age=3600';
-        return { success: true, message: 'Logged in successfully!' };
-    }
-    return { success: false, message: 'Invalid credentials.' };
-}
+import { login } from '@/app/login/actions';
 
 
 export default function LoginPage() {
     const router = useRouter();
     const { toast } = useToast();
-    const [state, formAction] = useActionState(loginAction, { success: false, message: '' });
+    const [state, formAction, isPending] = useActionState(login, null);
 
     useEffect(() => {
-        if (state.success) {
-            toast({ title: 'Success', description: state.message });
+        if (state?.success) {
+            toast({ title: 'Success', description: 'Logged in successfully!' });
             router.push('/dashboard');
-        } else if (state.message) {
-            toast({ title: 'Error', description: state.message, variant: 'destructive' });
+        } else if (state?.error) {
+            toast({ title: 'Error', description: state.error, variant: 'destructive' });
         }
     }, [state, router, toast]);
 
@@ -70,7 +61,9 @@ export default function LoginPage() {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <Button className="w-full">Sign in</Button>
+                    <Button className="w-full" disabled={isPending}>
+                        {isPending ? 'Signing In...' : 'Sign in'}
+                    </Button>
                 </CardFooter>
             </form>
         </Card>

@@ -1,6 +1,11 @@
 export type IssueStatus = 'Reported' | 'In Progress' | 'Resolved' | 'Rejected';
 export type IssueCategory = 'Pothole' | 'Broken Streetlight' | 'Graffiti' | 'Trash Overflow' | 'Other';
 
+export interface User {
+    name: string;
+    avatarUrl: string;
+}
+
 export interface Issue {
   id: string;
   title: string;
@@ -16,8 +21,5 @@ export interface Issue {
   imageHint: string;
   reportedAt: string;
   updatedAt: string;
-  reporter: {
-    name: string;
-    avatarUrl: string;
-  };
+  reporter: User;
 }

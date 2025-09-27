@@ -9,20 +9,20 @@ import {
 } from '@/components/ui/sidebar';
 import Logo from '@/components/layout/Logo';
 import { SidebarNav } from '@/components/dashboard/SidebarNav';
-import { cookies } from 'next/headers';
+import { getSession } from '@/lib/session';
 import { redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies();
-  const authCookie = cookieStore.get('auth');
-  if (!authCookie || authCookie.value !== 'true') {
-    return redirect('/login');
+  const session = await getSession();
+
+  if (!session.isLoggedIn) {
+    redirect('/login');
   }
 
   return (

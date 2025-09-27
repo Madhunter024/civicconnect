@@ -5,8 +5,9 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { categorizeCivicIssue } from '@/ai/flows/categorize-civic-issues';
 import { issues } from '@/lib/data';
-import type { Issue, IssueCategory } from '@/lib/types';
+import type { Issue, IssueCategory, User } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { getSession } from '@/lib/session';
 
 const formSchema = z.object({
   description: z.string(),
@@ -29,6 +30,15 @@ const categoryMap: Record<string, IssueCategory> = {
 };
 
 export async function reportIssue(prevState: FormState, formData: FormData): Promise<FormState> {
+  const session = await getSession();
+  if (!session.isLoggedIn || !session.user) {
+    return {
+        message: 'You must be logged in to report an issue.',
+        success: false
+    }
+  }
+
+
   const validatedFields = formSchema.safeParse({
     description: formData.get('description'),
     address: formData.get('address'),
@@ -80,7 +90,7 @@ export async function reportIssue(prevState: FormState, formData: FormData): Pro
         imageHint: placeholder.imageHint,
         reportedAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        reporter: { name: 'Current User', avatarUrl: 'https://i.pravatar.cc/150?u=user' },
+        reporter: session.user as User,
     };
 
     issues.unshift(newIssue);

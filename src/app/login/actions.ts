@@ -40,16 +40,20 @@ export async function login(
       return { error: 'Invalid username or password.' };
     }
     
-    // In a real app, you'd verify the user's role against the database.
-    // For now, we'll trust the role selected on the form.
-    const userRole: UserRole = role;
+    // Check if the selected role on the form matches the role in the database
+    if (user.role !== role) {
+      return { error: `Invalid credentials for the selected '${role}' role.` };
+    }
+    
+    const userRole: UserRole = user.role;
 
     const session = await getSession();
     session.user = {
       id: user._id.toString(),
       username: user.username,
       email: user.email,
-      role: userRole
+      role: userRole,
+      department: user.department,
     };
     session.isLoggedIn = true;
     await session.save();

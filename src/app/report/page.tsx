@@ -1,6 +1,6 @@
 'use client';
 
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -32,7 +32,7 @@ const initialState: FormState = {
 };
 
 export default function ReportPage() {
-  const [state, formAction] = useFormState(reportIssue, initialState);
+  const [state, formAction] = useActionState(reportIssue, initialState);
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
 

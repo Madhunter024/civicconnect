@@ -52,6 +52,18 @@ import {
   XCircle
 } from 'lucide-react';
 import { Button } from '../ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { useToast } from '@/hooks/use-toast';
+import { deleteIssue } from '@/app/dashboard/admin/actions';
 
 interface ClientDashboardProps {
   summary: string;
@@ -66,12 +78,14 @@ interface ClientDashboardProps {
 export default function ClientDashboard({ summary, issues: allIssues, users, analyticsData: summaryAnalyticsData }: ClientDashboardProps) {
   const [activeSection, setActiveSection] = useState('overview');
   const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
+  const [issueToDelete, setIssueToDelete] = useState<Issue | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
   const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [filterDistrict, setFilterDistrict] = useState('');
+  const { toast } = useToast();
 
   // Comprehensive system data
   const systemStats = {
@@ -125,6 +139,27 @@ export default function ClientDashboard({ summary, issues: allIssues, users, ana
       { month: 'Mar', issues: 1567, resolved: 1434 }
     ]
   };
+
+  const handleDelete = async () => {
+    if (!issueToDelete) return;
+
+    const result = await deleteIssue(issueToDelete.id);
+
+    if (result.success) {
+      toast({
+        title: 'Success!',
+        description: result.message,
+      });
+    } else {
+      toast({
+        title: 'Error',
+        description: result.message,
+        variant: 'destructive',
+      });
+    }
+    setIssueToDelete(null);
+  };
+
 
   const getStatusColor = (status: any) => {
     switch (status) {
@@ -432,7 +467,7 @@ export default function ClientDashboard({ summary, issues: allIssues, users, ana
                       >
                         <Edit className="w-4 h-4" />
                       </button>
-                      <button className="text-red-600 hover:text-red-800">
+                      <button onClick={() => setIssueToDelete(issue)} className="text-red-600 hover:text-red-800">
                         <Trash2 className="w-4 h-4" />
                       </button>
                       <button className="text-gray-600 hover:text-gray-800">
@@ -909,6 +944,21 @@ export default function ClientDashboard({ summary, issues: allIssues, users, ana
           </div>
         </div>
       )}
+       <AlertDialog open={!!issueToDelete} onOpenChange={(open) => !open && setIssueToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the issue
+              and remove its data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setIssueToDelete(null)}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

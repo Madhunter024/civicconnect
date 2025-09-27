@@ -128,27 +128,15 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-3">
-                <div className="bg-gradient-to-r from-orange-600 to-green-600 p-2 rounded-xl shadow-lg">
-                  <BarChart3 className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-lg font-bold bg-gradient-to-r from-orange-600 to-green-600 bg-clip-text text-transparent">
-                    Civic Connect
-                  </h1>
-                  <p className="text-xs text-gray-600">झारखंड सरकार</p>
-                </div>
+            <div className="flex items-center space-x-3">
+              <div className="bg-gradient-to-r from-orange-600 to-green-600 p-2 rounded-xl shadow-lg">
+                <BarChart3 className="w-6 h-6 text-white" />
               </div>
-              <div className="hidden md:block border-l border-gray-300 pl-4">
-                <div className="flex items-center space-x-2 text-sm">
-                  <img 
-                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23FF6B35'/%3E%3Ctext x='50' y='55' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold' font-size='20'%3EJH%3C/text%3E%3C/svg%3E" 
-                    alt="Jharkhand Logo" 
-                    className="w-6 h-6"
-                  />
-                  <span className="text-gray-600 font-medium">Government of Jharkhand</span>
-                </div>
+              <div>
+                <h1 className="text-lg font-bold bg-gradient-to-r from-orange-600 to-green-600 bg-clip-text text-transparent">
+                  Civic Connect
+                </h1>
+                <p className="text-xs text-gray-600">झारखंड सरकार</p>
               </div>
             </div>
 

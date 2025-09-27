@@ -12,11 +12,7 @@ export const sessionOptions = {
 
 export interface SessionData {
   isLoggedIn: boolean;
-  user?: {
-      id: string;
-      username: string;
-      email: string;
-  };
+  user?: User;
 }
 
 export async function getSession() {

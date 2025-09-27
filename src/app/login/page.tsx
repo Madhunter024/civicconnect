@@ -18,6 +18,7 @@ import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { login } from '@/app/login/actions';
 import { BarChart3 } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 
 export default function LoginPage() {
@@ -54,10 +55,33 @@ export default function LoginPage() {
                 <CardHeader>
                     <CardTitle className="text-2xl font-bold text-gray-900">Login to Your Account</CardTitle>
                     <CardDescription>
-                     Enter your credentials to access your dashboard.
+                     Select your role and enter your credentials.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4">
+                    <div className="grid gap-2">
+                        <Label>Select your role</Label>
+                         <RadioGroup defaultValue="citizen" name="role" className="grid grid-cols-3 gap-4">
+                            <div>
+                                <RadioGroupItem value="citizen" id="citizen" className="peer sr-only" />
+                                <Label htmlFor="citizen" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                                    Citizen
+                                </Label>
+                            </div>
+                            <div>
+                                <RadioGroupItem value="admin" id="admin" className="peer sr-only" />
+                                <Label htmlFor="admin" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                                    Admin
+                                </Label>
+                            </div>
+                            <div>
+                                <RadioGroupItem value="official" id="official" className="peer sr-only" />
+                                <Label htmlFor="official" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                                    Official
+                                </Label>
+                            </div>
+                        </RadioGroup>
+                    </div>
                     <div className="grid gap-2">
                         <Label htmlFor="username">Username</Label>
                         <Input id="username" name="username" type="text" placeholder="your_username" required />

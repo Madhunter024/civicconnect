@@ -1,10 +1,12 @@
 export type IssueStatus = 'Reported' | 'In Progress' | 'Resolved' | 'Rejected';
 export type IssueCategory = 'Pothole' | 'Broken Streetlight' | 'Graffiti' | 'Trash Overflow' | 'Other';
+export type UserRole = 'citizen' | 'admin' | 'official';
 
 export interface User {
     id: string;
     username: string;
     email: string;
+    role: UserRole;
 }
 
 export interface Issue {

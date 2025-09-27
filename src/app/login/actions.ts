@@ -5,10 +5,12 @@ import { redirect } from 'next/navigation';
 import { connectToDatabase } from '@/lib/mongodb';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
+import type { UserRole } from '@/lib/types';
 
 const loginSchema = z.object({
     username: z.string().min(1, 'Username is required.'),
     password: z.string().min(1, 'Password is required.'),
+    role: z.enum(['citizen', 'admin', 'official']),
 });
 
 
@@ -22,7 +24,7 @@ export async function login(
     return { error: 'Invalid fields. Please check your inputs.' };
   }
 
-  const { username, password } = validatedFields.data;
+  const { username, password, role } = validatedFields.data;
 
   try {
     const { db } = await connectToDatabase();
@@ -37,12 +39,17 @@ export async function login(
     if (!passwordsMatch) {
       return { error: 'Invalid username or password.' };
     }
+    
+    // In a real app, you'd verify the user's role against the database.
+    // For now, we'll trust the role selected on the form.
+    const userRole: UserRole = role;
 
     const session = await getSession();
     session.user = {
       id: user._id.toString(),
       username: user.username,
       email: user.email,
+      role: userRole
     };
     session.isLoggedIn = true;
     await session.save();

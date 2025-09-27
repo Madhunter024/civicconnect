@@ -25,11 +25,6 @@ const menuItems = [
     label: 'Report Issue',
     icon: <FilePlus2 />,
   },
-  {
-    href: '/dashboard/analytics',
-    label: 'Analytics',
-    icon: <BarChart3 />,
-  },
 ];
 export function SidebarNav() {
   const pathname = usePathname();
@@ -47,7 +42,7 @@ export function SidebarNav() {
         <SidebarMenuItem key={item.href}>
           <Link href={item.href}>
             <SidebarMenuButton
-              isActive={pathname === item.href}
+              isActive={pathname === item.href || (item.href === '/dashboard' && pathname.startsWith('/dashboard/analytics'))}
               icon={item.icon}
               tooltip={item.label}
             >

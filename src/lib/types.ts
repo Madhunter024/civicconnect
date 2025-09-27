@@ -9,8 +9,12 @@ export interface User {
     role: UserRole;
 }
 
+export interface Department {
+  name: string;
+}
+
 export interface Issue {
-  id: string;
+  id:string;
   title: string;
   description: string;
   category: IssueCategory;
@@ -24,5 +28,9 @@ export interface Issue {
   imageHint: string;
   reportedAt: string;
   updatedAt: string;
-  reporter: Pick<User, 'username'> & { avatarUrl?: string };
+  reporter: {
+    name: string;
+    avatarUrl?: string | undefined;
+    username?: string;
+};
 }

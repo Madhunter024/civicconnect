@@ -29,7 +29,7 @@ export default function LoginPage() {
     useEffect(() => {
         if (state?.success) {
             toast({ title: 'Success', description: 'Logged in successfully!' });
-            router.push('/dashboard');
+            router.push('/home');
         } else if (state?.error) {
             toast({ title: 'Error', description: state.error, variant: 'destructive' });
         }

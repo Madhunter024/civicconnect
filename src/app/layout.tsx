@@ -25,11 +25,8 @@ export default function RootLayout({
         />
       </head>
       <body className={cn('font-body antialiased', 'h-full bg-background')}>
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-grow">{children}</main>
-        </div>
         <Toaster />
+        {children}
       </body>
     </html>
   );

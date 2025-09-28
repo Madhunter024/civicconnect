@@ -1,4 +1,4 @@
-# **App Name**: CitizEngage
+# **App Name**: Civic Connect
 
 ## Core Features:
 

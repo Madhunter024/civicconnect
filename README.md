@@ -2,6 +2,24 @@
 
 This is a Next.js application for reporting and managing civic issues in Jharkhand, built with Firebase Studio.
 
+## Getting Started
+
+To get started with this project from GitHub, you'll need to clone the repository and then set up your local environment.
+
+### 1. Clone the Repository
+
+Open your terminal, navigate to the directory where you want to store the project, and run the following git command:
+
+```bash
+git clone https://github.com/your-username/your-repository-name.git
+cd your-repository-name
+```
+(Replace `your-username/your-repository-name` with the actual path to your GitHub repository).
+
+### 2. Follow Local Setup Instructions
+
+Once you have cloned the repository and navigated into the project directory, follow the steps below to run the application locally.
+
 ## Running Locally
 
 To run this project on your local machine, follow these steps.
